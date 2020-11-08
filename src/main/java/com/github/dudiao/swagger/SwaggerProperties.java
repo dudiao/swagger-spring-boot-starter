@@ -20,96 +20,96 @@ import java.util.Map;
  * @date 2020/10/10 上午 12:06
  */
 @Data
-@ConfigurationProperties("springfox.documentation.swagger")
+@ConfigurationProperties("swagger")
 public class SwaggerProperties {
 
     /**
      * 标题
      **/
-    private String title = "";
+    protected String title = "";
     /**
      * 描述
      **/
-    private String description = "";
+    protected String description = "";
     /**
      * 版本
      **/
-    private String version = "";
+    protected String version = "";
     /**
      * 许可证
      **/
-    private String license = "";
+    protected String license = "";
     /**
      * 许可证URL
      **/
-    private String licenseUrl = "";
+    protected String licenseUrl = "";
     /**
      * 服务条款URL
      **/
-    private String termsOfServiceUrl = "";
+    protected String termsOfServiceUrl = "";
 
     /**
      * 忽略的参数类型
      **/
-    private List<Class<?>> ignoredParameterTypes = new ArrayList<>();
+    protected List<Class<?>> ignoredParameterTypes = new ArrayList<>();
 
     /**
      * 联系人信息
      */
     @NestedConfigurationProperty
-    private Contact contact = new Contact();
+    protected Contact contact = new Contact();
 
     /**
      * swagger会解析的包路径（前缀）集合，不支持正则表达式
      **/
-    private List<String> basePackage = new ArrayList<>();
+    protected List<String> basePackage = new ArrayList<>();
 
     /**
      * swagger会解析的url规则
      **/
-    private List<String> basePath = new ArrayList<>();
+    protected List<String> basePath = new ArrayList<>();
     /**
      * 在basePath基础上需要排除的url规则
      **/
-    private List<String> excludePath = new ArrayList<>();
+    protected List<String> excludePath = new ArrayList<>();
 
     /**
      * 分组文档
      **/
-    private Map<String, DocketInfo> docket = new LinkedHashMap<>();
+    protected Map<String, DocketInfo> docket = new LinkedHashMap<>();
 
     /**
      * host信息
      **/
-    private String host = "";
+    protected String host = "";
 
     /**
      * 全局参数配置
      **/
-    private List<GlobalOperationParameter> globalOperationParameters;
+    protected List<GlobalOperationParameter> globalOperationParameters;
 
     /**
      * 页面功能配置
      **/
     @NestedConfigurationProperty
-    private UiConfig uiConfig = new UiConfig();
+    protected UiConfig uiConfig = new UiConfig();
 
     /**
      * 是否使用默认预定义的响应消息 ，默认 true
      **/
-    private Boolean applyDefaultResponseMessages = true;
+    protected Boolean applyDefaultResponseMessages = true;
 
     /**
      * 全局响应消息
      **/
     @NestedConfigurationProperty
-    private GlobalResponseMessage globalResponseMessage;
+    protected GlobalResponseMessage globalResponseMessage;
 
     /**
      * 全局统一鉴权配置
      **/
     @NestedConfigurationProperty
-    private Authorization authorization = new Authorization();
+    protected Authorization authorization = new Authorization();
 
     @Data
     @NoArgsConstructor
@@ -117,27 +117,27 @@ public class SwaggerProperties {
         /**
          * 参数名
          **/
-        private String name;
+        protected String name;
 
         /**
          * 描述信息
          **/
-        private String description;
+        protected String description;
 
         /**
          * 指定参数类型
          **/
-        private ScalarType scalarType;
+        protected ScalarType scalarType;
 
         /**
          * 参数放在哪个地方:header,query,path,body,form
          **/
-        private String parameterType;
+        protected String parameterType;
 
         /**
          * 参数是否必须传
          **/
-        private String required;
+        protected String required;
 
     }
 
@@ -148,54 +148,54 @@ public class SwaggerProperties {
         /**
          * 标题
          **/
-        private String title = "";
+        protected String title = "";
         /**
          * 描述
          **/
-        private String description = "";
+        protected String description = "";
         /**
          * 版本
          **/
-        private String version = "";
+        protected String version = "";
         /**
          * 许可证
          **/
-        private String license = "";
+        protected String license = "";
         /**
          * 许可证URL
          **/
-        private String licenseUrl = "";
+        protected String licenseUrl = "";
         /**
          * 服务条款URL
          **/
-        private String termsOfServiceUrl = "";
+        protected String termsOfServiceUrl = "";
 
         /**
          * 联系人信息
          */
         @NestedConfigurationProperty
-        private Contact contact = new Contact();
+        protected Contact contact = new Contact();
 
         /**
          * swagger会解析的包路径
          **/
-        private List<String> basePackage = new ArrayList<>();
+        protected List<String> basePackage = new ArrayList<>();
 
         /**
          * swagger会解析的url规则
          **/
-        private List<String> basePath = new ArrayList<>();
+        protected List<String> basePath = new ArrayList<>();
         /**
          * 在basePath基础上需要排除的url规则
          **/
-        private List<String> excludePath = new ArrayList<>();
+        protected List<String> excludePath = new ArrayList<>();
 
-        private List<GlobalOperationParameter> globalOperationParameters;
+        protected List<GlobalOperationParameter> globalOperationParameters;
 
         /**
          * 忽略的参数类型
          **/
-        private List<Class<?>> ignoredParameterTypes = new ArrayList<>();
+        protected List<Class<?>> ignoredParameterTypes = new ArrayList<>();
 
     }
 
@@ -206,15 +206,15 @@ public class SwaggerProperties {
         /**
          * 联系人
          **/
-        private String name = "";
+        protected String name = "";
         /**
          * 联系人url
          **/
-        private String url = "";
+        protected String url = "";
         /**
          * 联系人email
          **/
-        private String email = "";
+        protected String email = "";
 
     }
 
@@ -271,17 +271,17 @@ public class SwaggerProperties {
         /**
          * 响应码
          **/
-        private String code;
+        protected String code;
 
         /**
          * 响应消息
          **/
-        private String message;
+        protected String message;
 
         /**
          * 响应体
          **/
-        private String modelRef;
+        protected String modelRef;
 
     }
 
@@ -291,52 +291,52 @@ public class SwaggerProperties {
     public static class UiConfig {
 
 
-        private String apiSorter = "alpha";
+        protected String apiSorter = "alpha";
 
         /**
          * 是否启用json编辑器
          **/
-        private Boolean jsonEditor = false;
+        protected Boolean jsonEditor = false;
         /**
          * 是否显示请求头信息
          **/
-        private Boolean showRequestHeaders = true;
+        protected Boolean showRequestHeaders = true;
         /**
          * 支持页面提交的请求类型
          **/
-        private String submitMethods = "get,post,put,delete,patch";
+        protected String submitMethods = "get,post,put,delete,patch";
         /**
          * 请求超时时间
          **/
-        private Long requestTimeout = 10000L;
+        protected Long requestTimeout = 10000L;
 
-        private Boolean deepLinking;
-        private Boolean displayOperationId;
-        private Integer defaultModelsExpandDepth;
-        private Integer defaultModelExpandDepth;
-        private ModelRendering defaultModelRendering;
+        protected Boolean deepLinking;
+        protected Boolean displayOperationId;
+        protected Integer defaultModelsExpandDepth;
+        protected Integer defaultModelExpandDepth;
+        protected ModelRendering defaultModelRendering;
 
         /**
          * 是否显示请求耗时，默认 true
          */
-        private Boolean displayRequestDuration = true;
+        protected Boolean displayRequestDuration = true;
         /**
          * 可选 none | list
          */
-        private DocExpansion docExpansion;
+        protected DocExpansion docExpansion;
         /**
          * Boolean=false OR String
          */
-        private Object filter;
-        private Integer maxDisplayedTags;
-        private OperationsSorter operationsSorter;
-        private Boolean showExtensions;
-        private TagsSorter tagsSorter;
+        protected Object filter;
+        protected Integer maxDisplayedTags;
+        protected OperationsSorter operationsSorter;
+        protected Boolean showExtensions;
+        protected TagsSorter tagsSorter;
 
         /**
          * Network
          */
-        private String validatorUrl;
+        protected String validatorUrl;
     }
 
     /**
@@ -344,26 +344,26 @@ public class SwaggerProperties {
      */
     @Data
     @NoArgsConstructor
-    static class Authorization {
+    public static class Authorization {
 
         /**
          * 鉴权策略ID，对应 SecurityReferences ID
          */
-        private String name = "Authorization";
+        protected String name = "Authorization";
 
         /**
          * 鉴权策略，可选 ApiKey | BasicAuth ，默认ApiKey
          */
-        private SwaggerSecurityScheme type = SwaggerSecurityScheme.API_KEY;
+        protected SwaggerSecurityScheme type = SwaggerSecurityScheme.API_KEY;
 
         /**
          * 鉴权传递的Header参数
          */
-        private String keyName = "TOKEN";
+        protected String keyName = "TOKEN";
 
         /**
          * 需要开启鉴权URL的正则
          */
-        private String authRegex = "^.*$";
+        protected String authRegex = "^.*$";
     }
 }

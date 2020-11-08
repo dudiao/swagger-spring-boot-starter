@@ -1,0 +1,21 @@
+# swagger配置
+swagger:
+  enabled: true
+  title: Gits_接口文档
+  version: ${revision}
+  docket:
+    login:
+      base-package: com.github.dudiao.swagger.test.login
+    system:
+      base-package: com.github.dudiao.swagger.test.system
+  authorization:
+    key-name: GitsSessionID
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'

@@ -1,10 +1,12 @@
 package com.github.dudiao.swagger;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,22 +35,37 @@ import java.util.stream.Collectors;
  * @author songyinyin (https://github.com/dudiao)
  * @date 2020/10/10 上午 12:11
  */
+@Slf4j
 @Configuration
-@EnableConfigurationProperties(SwaggerProperties.class)
-public class SwaggerAutoConfiguration implements BeanFactoryAware {
+@EnableConfigurationProperties({SwaggerProperties.class, Swagger3Properties.class})
+public class Swagger3AutoConfiguration implements BeanFactoryAware {
+
+    private BeanFactory beanFactory;
 
     @Value("${springfox.documentation.swagger.v2.use-model-v3:true}")
     private Boolean useModelV3;
 
-    private BeanFactory beanFactory;
+    @Autowired
+    private List<SwaggerProperties> swaggerPropertiesList;
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
     }
 
+    private SwaggerProperties getSwaggerProperties(List<SwaggerProperties> list) {
+        for (SwaggerProperties swaggerProperties : list) {
+            if (StringUtils.hasLength(swaggerProperties.getTitle())) {
+                log.info("use {} config swagger.", swaggerProperties.getClass().getName());
+                return swaggerProperties;
+            }
+        }
+        throw new IllegalArgumentException("'swagger.title' or 'springfox.documentation.swagger.title' must have value.");
+    }
+
     @Bean
-    public UiConfiguration uiConfiguration(SwaggerProperties swaggerProperties) {
+    public UiConfiguration uiConfiguration() {
+        SwaggerProperties swaggerProperties = getSwaggerProperties(swaggerPropertiesList);
         return UiConfigurationBuilder.builder()
                 .deepLinking(swaggerProperties.getUiConfig().getDeepLinking())
                 .defaultModelExpandDepth(swaggerProperties.getUiConfig().getDefaultModelExpandDepth())
@@ -68,8 +85,9 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnBean(UiConfiguration.class)
-    @ConditionalOnProperty(name = "swagger.enabled", matchIfMissing = true)
-    public List<Docket> createRestApi(SwaggerProperties swaggerProperties) {
+    @ConditionalOnProperty(name = {"swagger.enabled", "springfox.documentation.swagger.enabled"}, matchIfMissing = true)
+    public List<Docket> createRestApi() {
+        SwaggerProperties swaggerProperties = getSwaggerProperties(swaggerPropertiesList);
         // 没有分组
         if (swaggerProperties.getDocket().size() == 0) {
             return defaultDocket(swaggerProperties);
@@ -85,7 +103,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
      * @return
      */
     private List<Docket> defaultDocket(SwaggerProperties swaggerProperties) {
-        ConfigurableBeanFactory configurableBeanFactory = (ConfigurableBeanFactory) beanFactory;
+        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
 
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title(swaggerProperties.getTitle())
@@ -122,7 +140,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
         Class<?>[] ignoredParameterTypes = swaggerProperties.getIgnoredParameterTypes().toArray(array);
         docket.ignoredParameterTypes(ignoredParameterTypes);
 
-        configurableBeanFactory.registerSingleton("defaultDocket", docket);
+        defaultListableBeanFactory.registerSingleton("defaultDocket", docket);
         return Collections.singletonList(docket);
     }
 
@@ -133,7 +151,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
      * @return
      */
     private List<Docket> customizeDocket(SwaggerProperties swaggerProperties) {
-        ConfigurableBeanFactory configurableBeanFactory = (ConfigurableBeanFactory) beanFactory;
+        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
+
         List<Docket> docketList = new LinkedList<>();
 
         for (String groupName : swaggerProperties.getDocket().keySet()) {
@@ -180,7 +199,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
             Class<?>[] ignoredParameterTypes = docketInfo.getIgnoredParameterTypes().toArray(array);
             docket.ignoredParameterTypes(ignoredParameterTypes);
 
-            configurableBeanFactory.registerSingleton(groupName, docket);
+            defaultListableBeanFactory.registerSingleton(groupName + "Docket", docket);
             docketList.add(docket);
         }
         return docketList;

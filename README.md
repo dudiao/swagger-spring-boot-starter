@@ -17,3 +17,17 @@ Swagger3.0推出了官方starter`springfox-boot-starter`，`springfox.documentat
 - 精简了依赖，比如`guava`
 
 ## 和`spring-boot-starter-swagger`的差异
+
+## 关于认证
+
+如果项目中用到了Spring Security等权限控制组件，需要将以下路径添加白名单，不做鉴权：
+```java
+String[] authWhiteList = {
+        "/swagger-ui.html",
+        "/swagger-ui/*",
+        "/swagger-resources/**",
+        "/v2/api-docs",
+        "/v3/api-docs",
+        "/webjars/**"
+};
+```
